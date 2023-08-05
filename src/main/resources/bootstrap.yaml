@@ -3,6 +3,13 @@ spring:
   profiles:
     active: dev
   cloud:
+    vault:
+      token: ${VAULT_TOKEN}
+      authentication: token
+      uri: http://vault:8200
+      kv:
+        default-context: product
+        backend: secret
     config:
       name: product-ms
       discovery:
@@ -15,4 +22,4 @@ eureka:
     preferIpAddress: true
   client:
     serviceUrl:
-      defaultZone: http://localhost:8082/eureka/
+      defaultZone: http://discovery-server:8082/eureka/
