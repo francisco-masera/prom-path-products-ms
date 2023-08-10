@@ -3,6 +3,7 @@ package org.dargor.product.app.controller;
 import lombok.AllArgsConstructor;
 import org.dargor.product.app.dto.ProductDto;
 import org.dargor.product.app.dto.WishListDto;
+import org.dargor.product.app.dto.WishListRequestDto;
 import org.dargor.product.app.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<WishListDto> createProducts(@RequestBody @Valid WishListDto request) {
+    public ResponseEntity<WishListDto> createProducts(@RequestBody @Valid WishListRequestDto request) {
         var response = productService.createProducts(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

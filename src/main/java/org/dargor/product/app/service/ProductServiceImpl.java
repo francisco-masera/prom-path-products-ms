@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dargor.product.app.dto.ProductDto;
 import org.dargor.product.app.dto.WishListDto;
+import org.dargor.product.app.dto.WishListRequestDto;
 import org.dargor.product.core.repository.ProductRepository;
 import org.dargor.product.core.util.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
@@ -33,8 +34,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public WishListDto createProducts(WishListDto request) {
+    public WishListDto createProducts(WishListRequestDto request) {
         try {
+            log.info(String.format("WishListDTO request %s", request));
             var products = productMapper.wishListRequestToProductList(request);
             var savedProducts = productRepository.saveAll(products);
             return productMapper.productsToWishListResponse(savedProducts);

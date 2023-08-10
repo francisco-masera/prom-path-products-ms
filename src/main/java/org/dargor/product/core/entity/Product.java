@@ -35,6 +35,8 @@ public class Product implements Serializable {
 
     private BigDecimal unitPrice;
 
-    private UUID customerId;
+    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
 }
