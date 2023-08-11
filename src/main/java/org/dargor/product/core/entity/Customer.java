@@ -32,7 +32,7 @@ public class Customer {
 
     private boolean active;
 
-    @OneToMany(mappedBy = "customer", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Product> products;
 
 }
