@@ -10,9 +10,10 @@ spring:
         default-context: product
         backend: secret
     config:
-      name: product-ms
-      profile: dev
-      discovery:
-        service-id: config-server
-        enabled: true
+      enabled: true
+      fail-fast: true
+      uri: http://config-server:8888
+      retry:
+        max-attempts: 5
+        max-interval: 1500
 server.port: 9002
