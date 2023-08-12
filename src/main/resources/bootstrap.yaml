@@ -16,9 +16,3 @@ spring:
         service-id: config-server
         enabled: true
 server.port: 9002
-eureka:
-  instance:
-    preferIpAddress: true
-  client:
-    serviceUrl:
-      defaultZone: http://discovery-server:8082/eureka/

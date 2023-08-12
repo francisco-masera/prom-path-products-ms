@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-ms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-ms
+  template:
+    metadata:
+      labels:
+        app: product-ms
+    spec:
+      containers:
+        - name: product-ms
+          image: ghcr.io/dargor94/product-ms:latest
+          ports:
+            - containerPort: 9002
+          env:
+            - name: VAULT_TOKEN
+              value: root
+      imagePullSecrets:
+        - name: regcred
