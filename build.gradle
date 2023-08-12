@@ -37,13 +37,11 @@ dependencies {
             'org.springframework.cloud:spring-cloud-config-client',
             'org.springframework.cloud:spring-cloud-starter-vault-config',
             'org.springframework.cloud:spring-cloud-starter-bootstrap',
-            'org.springframework.cloud:spring-cloud-starter-zipkin:2.2.8.RELEASE',
             'org.mapstruct:mapstruct:1.5.5.Final',
 
     )
 
     compileOnly(
-            'org.springframework.cloud:spring-cloud-starter-sleuth',
             'org.projectlombok:lombok',
 
     )
