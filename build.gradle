@@ -38,6 +38,7 @@ dependencies {
             'org.springframework.cloud:spring-cloud-starter-vault-config',
             'org.springframework.cloud:spring-cloud-starter-bootstrap',
             'org.mapstruct:mapstruct:1.5.5.Final',
+            'io.opentracing.contrib:opentracing-spring-jaeger-cloud-starter:3.3.1',
 
     )
 
