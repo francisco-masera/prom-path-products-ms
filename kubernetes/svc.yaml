@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: product-ms
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - port: 9002
       protocol: TCP
