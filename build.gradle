@@ -33,6 +33,7 @@ dependencies {
             'org.springframework.cloud:spring-cloud-config-client',
             'org.springframework.cloud:spring-cloud-starter-vault-config',
             'org.springframework.cloud:spring-cloud-starter-bootstrap',
+            'redis.clients:jedis',
             'io.opentracing.contrib:opentracing-spring-jaeger-cloud-starter:3.3.1',
             'org.mapstruct:mapstruct:1.5.5.Final',
 
