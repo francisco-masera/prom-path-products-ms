@@ -16,4 +16,4 @@ spec:
         - name: customer-ms
           image: dargorcr.azurecr.io/product-ms:latest
           ports:
-            - containerPort: 9001
+            - containerPort: 9002
