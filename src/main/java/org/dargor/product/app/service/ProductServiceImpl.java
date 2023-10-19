@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.dargor.product.app.dto.ProductDto;
 import org.dargor.product.app.dto.WishListDto;
 import org.dargor.product.app.dto.WishListRequestDto;
+import org.dargor.product.app.util.RedisUtil;
+import org.dargor.product.core.entity.Product;
 import org.dargor.product.core.repository.ProductRepository;
 import org.dargor.product.core.util.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
@@ -19,12 +21,20 @@ public class ProductServiceImpl implements ProductService {
 
     private static final ProductMapper productMapper = ProductMapper.INSTANCE;
     private final ProductRepository productRepository;
+    private final RedisUtil<List<Product>> redisUtil;
 
     @Override
     public List<ProductDto> getWishList(UUID customerId) {
         try {
-            var product = productRepository.findByCustomerId(customerId);
-            var response = productMapper.productsToProductDtoList(product);
+
+            var products = redisUtil.getValue("products");
+            log.info(String.format("Redis has retrieved products: [ %s ] : size --> %d", products, products.size()));
+            if (products.isEmpty()) {
+                products = productRepository.findByCustomerId(customerId);
+                redisUtil.storeValues("products", products, 5);
+            }
+
+            var response = productMapper.productsToProductDtoList(products);
             log.info(String.format("Product fetched successfully [customer %s] [response: %s]", customerId, response));
             return response;
         } catch (Exception e) {
@@ -32,6 +42,7 @@ public class ProductServiceImpl implements ProductService {
             throw e;
         }
     }
+
 
     @Override
     public WishListDto createProducts(WishListRequestDto request) {

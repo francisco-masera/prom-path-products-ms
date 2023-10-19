@@ -16,4 +16,5 @@ spring:
       retry:
         max-attempts: 5
         max-interval: 1500
+
 server.port: 9002
