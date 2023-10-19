@@ -35,7 +35,6 @@ dependencies {
             'org.springframework.cloud:spring-cloud-starter-bootstrap',
             'io.opentracing.contrib:opentracing-spring-jaeger-cloud-starter:3.3.1',
             'org.mapstruct:mapstruct:1.5.5.Final',
-            'redis.clients:jedis:4.4.3',
 
     )
 
