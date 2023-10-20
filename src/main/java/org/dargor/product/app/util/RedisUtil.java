@@ -18,7 +18,7 @@ public class RedisUtil<T> {
     }
 
     public T getValue(final String key) {
-        return redisTemplate.opsForList().getOperations().opsForValue().get(key);
+        return redisTemplate.opsForValue().get(key);
     }
 
     public void deleteValue(String key) {

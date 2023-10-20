@@ -11,7 +11,9 @@ import org.dargor.product.core.repository.ProductRepository;
 import org.dargor.product.core.util.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -27,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> getWishList(UUID customerId) {
         try {
 
-            var products = redisUtil.getValue("products");
+            var products = Optional.ofNullable(redisUtil.getValue("products")).orElse(Collections.emptyList());
             log.info(String.format("Redis has retrieved products: [ %s ] : size --> %d", products, products.size()));
             if (products.isEmpty()) {
                 products = productRepository.findByCustomerId(customerId);
