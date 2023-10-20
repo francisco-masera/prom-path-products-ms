@@ -11,7 +11,10 @@ import org.dargor.product.core.repository.ProductRepository;
 import org.dargor.product.core.util.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -24,9 +27,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<ProductDto> getWishList(UUID customerId) {
+    public List<ProductDto> getWishList(UUID customerId) throws ClassNotFoundException {
         try {
-            var redisObject = Optional.ofNullable(redisUtil.getListValue("products")).orElse(Collections.emptyList());
+            var redisObject = Optional.ofNullable(redisUtil.getValues("products", String.valueOf(List.class))).orElse(Collections.emptyList());
             var products = (List<Product>) redisObject;
             log.info(String.format("Redis has retrieved products: [ %s ] : size --> %d", products, products.size()));
             if (products.isEmpty()) {

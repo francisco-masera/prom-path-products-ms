@@ -32,8 +32,7 @@ public class Product {
 
     private BigDecimal unitPrice;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+    private UUID customerId;
+
 
 }
