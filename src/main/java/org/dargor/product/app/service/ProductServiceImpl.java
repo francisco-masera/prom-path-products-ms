@@ -27,8 +27,8 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> getWishList(UUID customerId) {
         try {
 
-            var redisObject = Optional.ofNullable(redisUtil.getValue("products")).orElse(Collections.emptyList());
-            var products = redisObject instanceof List<?> ? (List<Product>) redisObject : new ArrayList<Product>();
+            var redisObject = Optional.ofNullable(redisUtil.getListValue("products")).orElse(Collections.emptyList());
+            var products = (List<Product>) redisObject;
             log.info(String.format("Redis has retrieved products: [ %s ] : size --> %d", products, products.size()));
             if (products.isEmpty()) {
                 products = productRepository.findByCustomerId(customerId);

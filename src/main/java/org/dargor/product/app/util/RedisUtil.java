@@ -5,7 +5,10 @@ import com.google.gson.GsonBuilder;
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @AllArgsConstructor
@@ -20,8 +23,9 @@ public class RedisUtil<T> {
         redisTemplate.expire(key, expire, TimeUnit.MINUTES);
     }
 
-    public Object getValue(final String key) {
-        return GSON.fromJson(redisTemplate.opsForValue().get(key), Object.class);
+    public List<?> getListValue(final String key) {
+        var value = redisTemplate.opsForValue().get(key);
+        return ObjectUtils.isEmpty(value) ? Collections.emptyList() : GSON.fromJson(value, List.class);
     }
 
     public void deleteValue(String key) {
