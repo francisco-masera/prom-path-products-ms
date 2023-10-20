@@ -1,6 +1,7 @@
 package org.dargor.product.app.util;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisUtil<T> {
 
-    private static final Gson GSON = new Gson();
+    private static final Gson GSON = new GsonBuilder().disableInnerClassSerialization().create();
     private final RedisTemplate<String, String> redisTemplate;
 
     public void storeValues(final String key, T value, int expire) {
