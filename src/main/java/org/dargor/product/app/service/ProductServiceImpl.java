@@ -26,7 +26,6 @@ public class ProductServiceImpl implements ProductService {
     @SuppressWarnings("unchecked")
     public List<ProductDto> getWishList(UUID customerId) {
         try {
-
             var redisObject = Optional.ofNullable(redisUtil.getListValue("products")).orElse(Collections.emptyList());
             var products = (List<Product>) redisObject;
             log.info(String.format("Redis has retrieved products: [ %s ] : size --> %d", products, products.size()));
