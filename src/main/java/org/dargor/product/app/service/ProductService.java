@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface ProductService {
 
-    List<ProductDto> getWishList(UUID customerId) throws ClassNotFoundException;
+    List<ProductDto> getWishList(UUID customerId);
 
     WishListDto createProducts(WishListRequestDto request);
 

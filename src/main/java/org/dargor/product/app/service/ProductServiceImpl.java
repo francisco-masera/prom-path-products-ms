@@ -27,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<ProductDto> getWishList(UUID customerId) throws ClassNotFoundException {
+    public List<ProductDto> getWishList(UUID customerId) {
         try {
             var redisObject = Optional.ofNullable(redisUtil.getValues("products", String.valueOf(List.class))).orElse(Collections.emptyList());
             var products = (List<Product>) redisObject;
@@ -39,6 +39,9 @@ public class ProductServiceImpl implements ProductService {
             var response = productMapper.productsToProductDtoList(products);
             log.info(String.format("Product fetched successfully [customer %s] [response: %s]", customerId, response));
             return response;
+        } catch (ClassNotFoundException e) {
+            log.error(String.format("Error found getting products [customer %s]", customerId));
+            return null;
         } catch (Exception e) {
             log.error(String.format("Error found getting products [customer %s]", customerId));
             throw e;

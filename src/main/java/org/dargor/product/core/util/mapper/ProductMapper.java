@@ -7,6 +7,7 @@ import org.dargor.product.core.entity.Product;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -35,5 +36,8 @@ public interface ProductMapper {
 
     @IterableMapping(qualifiedByName = "productToProductDto")
     List<ProductDto> productsToProductDtoList(List<Product> products);
+
+    @Named("productToProductDto")
+    ProductDto productToProductDto(Product product);
 
 }
