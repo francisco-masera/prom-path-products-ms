@@ -11,10 +11,7 @@ import org.dargor.product.core.repository.ProductRepository;
 import org.dargor.product.core.util.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -26,16 +23,17 @@ public class ProductServiceImpl implements ProductService {
     private final RedisUtil<List<Product>> redisUtil;
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<ProductDto> getWishList(UUID customerId) {
         try {
 
-            var products = Optional.ofNullable(redisUtil.getValue("products")).orElse(Collections.emptyList());
+            var redisObject = Optional.ofNullable(redisUtil.getValue("products")).orElse(Collections.emptyList());
+            var products = redisObject instanceof List<?> ? (List<Product>) redisObject : new ArrayList<Product>();
             log.info(String.format("Redis has retrieved products: [ %s ] : size --> %d", products, products.size()));
             if (products.isEmpty()) {
                 products = productRepository.findByCustomerId(customerId);
                 redisUtil.storeValues("products", products, 5);
             }
-
             var response = productMapper.productsToProductDtoList(products);
             log.info(String.format("Product fetched successfully [customer %s] [response: %s]", customerId, response));
             return response;

@@ -23,7 +23,7 @@ public class RedisConfig {
         redisStandaloneConfiguration.setPort(6379);
 
         JedisClientConfiguration.JedisClientConfigurationBuilder jedisClientConfiguration = JedisClientConfiguration.builder();
-        jedisClientConfiguration.connectTimeout(Duration.ofSeconds(60));
+        jedisClientConfiguration.connectTimeout(Duration.ofSeconds(60));// 60s connection timeout
 
         return new JedisConnectionFactory(redisStandaloneConfiguration,
                 jedisClientConfiguration.build());
