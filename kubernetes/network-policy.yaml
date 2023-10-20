@@ -15,8 +15,14 @@ spec:
         - podSelector:
             matchLabels:
               app: customer-ms
+        - podSelector:
+            matchLabels:
+              app: redis
   egress:
     - to:
         - podSelector:
             matchLabels:
               app: customer-ms
+        - podSelector:
+            matchLabels:
+              app: redis
