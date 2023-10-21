@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -25,11 +27,7 @@ public class RedisUtil<T> {
     public Object getValues(final String key, String className) throws ClassNotFoundException {
         var values = redisTemplate.opsForValue().get(key);
         log.info(String.format("Redis values %s", values));
-        return GSON.fromJson(values, Class.forName(className));
-    }
-
-    public void deleteValue(String key) {
-        redisTemplate.delete(key);
+        return ObjectUtils.isEmpty(values) ? Optional.empty() : GSON.fromJson(values, Class.forName(className));
     }
 
 }
