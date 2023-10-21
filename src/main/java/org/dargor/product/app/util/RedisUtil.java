@@ -1,33 +1,32 @@
 package org.dargor.product.app.util;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dargor.product.core.entity.Product;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
 @AllArgsConstructor
-public class RedisUtil<T> {
+public class RedisUtil {
 
-    private static final Gson GSON = new GsonBuilder().disableInnerClassSerialization().create();
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, List<Product>> redisTemplate;
 
-    public void storeValues(final String key, T value, int expire) {
-        redisTemplate.opsForValue().set(key, GSON.toJson(value));
+    public void storeValues(final String key, List<Product> value, int expire) {
+        redisTemplate.opsForValue().set(key, value);
         redisTemplate.expire(key, expire, TimeUnit.MINUTES);
     }
 
-    public Object getValues(final String key, String className) throws ClassNotFoundException {
-        var values = redisTemplate.opsForValue().get(key);
+    public List<Product> getValues(final String key) throws ClassNotFoundException {
+        var values = Optional.ofNullable(redisTemplate.opsForValue().get(key));
         log.info(String.format("Redis values %s", values));
-        return ObjectUtils.isEmpty(values) ? Optional.empty() : GSON.fromJson(values, Class.forName(className));
+        return values.orElse(Collections.emptyList());
     }
 
 }
