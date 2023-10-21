@@ -3,13 +3,15 @@ package org.dargor.product.app.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
-@AllArgsConstructor
+@Slf4j
 @Component
+@AllArgsConstructor
 public class RedisUtil<T> {
 
     private static final Gson GSON = new GsonBuilder().disableInnerClassSerialization().create();
@@ -21,7 +23,9 @@ public class RedisUtil<T> {
     }
 
     public Object getValues(final String key, String className) throws ClassNotFoundException {
-        return GSON.fromJson(redisTemplate.opsForValue().get(key), Class.forName(className));
+        var values = redisTemplate.opsForValue().get(key);
+        log.info(String.format("Redis values %s", values));
+        return GSON.fromJson(values, Class.forName(className));
     }
 
     public void deleteValue(String key) {

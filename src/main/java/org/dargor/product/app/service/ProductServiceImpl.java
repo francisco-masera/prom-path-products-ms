@@ -40,10 +40,10 @@ public class ProductServiceImpl implements ProductService {
             log.info(String.format("Product fetched successfully [customer %s] [response: %s]", customerId, response));
             return response;
         } catch (ClassNotFoundException e) {
-            log.error(String.format("Error found getting products [customer %s]", customerId));
+            log.error(String.format("Error found getting products [customer %s] -  message: %s", customerId, e.getMessage()));
             return null;
         } catch (Exception e) {
-            log.error(String.format("Error found getting products [customer %s]", customerId));
+            log.error(String.format("Error found getting products [customer %s] -  message: %s", customerId, e.getMessage()));
             throw e;
         }
     }
