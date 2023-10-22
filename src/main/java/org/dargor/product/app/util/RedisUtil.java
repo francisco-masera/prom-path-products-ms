@@ -22,13 +22,13 @@ public class RedisUtil {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private final RedisTemplate<String, byte[]> redisTemplate;
 
-    public void storeValues(final String key, List<Product> value, int expire) throws JsonProcessingException {
-        redisTemplate.opsForList().rightPushAll(key, OBJECT_MAPPER.writeValueAsBytes(value));
+    public void storeValues(final String key, final String hashKey, List<Product> value, int expire) throws JsonProcessingException {
+        redisTemplate.opsForHash().put(key, hashKey, OBJECT_MAPPER.writeValueAsBytes(value));
         redisTemplate.expire(key, expire, TimeUnit.MINUTES);
     }
 
-    public List<Product> getValues(final String key) throws ClassNotFoundException {
-        var values = Optional.ofNullable(redisTemplate.opsForValue().get(key));
+    public List<Product> getValues(final String key, String hashKey) throws ClassNotFoundException {
+        var values = Optional.ofNullable(redisTemplate.opsForHash().get(key, hashKey));
         log.info(String.format("Redis values %s", values));
         return values.isPresent() ? OBJECT_MAPPER.convertValue(values.get(), new TypeReference<>() {
         }) : Collections.emptyList();

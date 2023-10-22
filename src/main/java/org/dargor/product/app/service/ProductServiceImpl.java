@@ -26,11 +26,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> getWishList(UUID customerId) {
         try {
-            var products = redisUtil.getValues("products");
+            var products = redisUtil.getValues("products", String.valueOf(customerId));
             log.info(String.format("Redis has retrieved products: [ %s ] : size --> %d", products, products.size()));
             if (products.isEmpty()) {
                 products = productRepository.findByCustomerId(customerId);
-                redisUtil.storeValues("products", products, 5);
+                redisUtil.storeValues("products", String.valueOf(customerId), products, 5);
             }
             var response = productMapper.productsToProductDtoList(products);
             log.info(String.format("Product fetched successfully [customer %s] [response: %s]", customerId, response));
