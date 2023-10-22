@@ -29,6 +29,8 @@ public class RedisUtil {
 
     public List<Product> getValues(final String key, String hashKey) throws ClassNotFoundException, JsonProcessingException {
         var values = Optional.ofNullable(redisTemplate.opsForHash().get(key, hashKey));
+        if (values.isPresent())
+            log.info(OBJECT_MAPPER.writeValueAsString(values.get()));
         return values.isPresent() ? OBJECT_MAPPER.convertValue(OBJECT_MAPPER.writeValueAsString(values.get()), new TypeReference<>() {
         }) : Collections.emptyList();
 
