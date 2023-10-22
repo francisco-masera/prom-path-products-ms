@@ -1,5 +1,6 @@
 package org.dargor.product.app.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dargor.product.app.dto.ProductDto;
@@ -34,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
             var response = productMapper.productsToProductDtoList(products);
             log.info(String.format("Product fetched successfully [customer %s] [response: %s]", customerId, response));
             return response;
-        } catch (ClassNotFoundException e) {
+        } catch (JsonProcessingException | ClassNotFoundException e) {
             log.error(String.format("Error found getting products [customer %s] -  message: %s", customerId, e.getMessage()));
             return null;
         } catch (Exception e) {
@@ -42,7 +43,6 @@ public class ProductServiceImpl implements ProductService {
             throw e;
         }
     }
-
 
     @Override
     public WishListDto createProducts(WishListRequestDto request) {
