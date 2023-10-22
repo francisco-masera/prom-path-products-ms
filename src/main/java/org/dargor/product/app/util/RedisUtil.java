@@ -27,10 +27,9 @@ public class RedisUtil {
         redisTemplate.expire(key, expire, TimeUnit.MINUTES);
     }
 
-    public List<Product> getValues(final String key, String hashKey) throws ClassNotFoundException {
+    public List<Product> getValues(final String key, String hashKey) throws ClassNotFoundException, JsonProcessingException {
         var values = Optional.ofNullable(redisTemplate.opsForHash().get(key, hashKey));
-        log.info(String.format("Redis values %s", values));
-        return values.isPresent() ? OBJECT_MAPPER.convertValue(values.get(), new TypeReference<>() {
+        return values.isPresent() ? OBJECT_MAPPER.convertValue(OBJECT_MAPPER.writeValueAsString(values.get()), new TypeReference<>() {
         }) : Collections.emptyList();
 
     }
