@@ -20,18 +20,17 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtil {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    private final RedisTemplate<String, byte[]> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public void storeValues(final String key, final String hashKey, List<Product> value, int expire) throws JsonProcessingException {
-        redisTemplate.opsForHash().put(key, hashKey, OBJECT_MAPPER.writeValueAsBytes(value));
+        redisTemplate.opsForHash().put(key, hashKey, value);
         redisTemplate.expire(key, expire, TimeUnit.MINUTES);
     }
 
     public List<Product> getValues(final String key, String hashKey) throws ClassNotFoundException, JsonProcessingException {
         var values = Optional.ofNullable(redisTemplate.opsForHash().get(key, hashKey));
-        if (values.isPresent())
-            log.info(OBJECT_MAPPER.writeValueAsString(values.get()));
-        return values.isPresent() ? OBJECT_MAPPER.convertValue(OBJECT_MAPPER.writeValueAsString(values.get()), new TypeReference<>() {
+        values.ifPresent(o -> log.info(String.format("Redis values %s", o)));
+        return values.isPresent() ? OBJECT_MAPPER.convertValue(values.get(), new TypeReference<>() {
         }) : Collections.emptyList();
 
     }

@@ -1,47 +1,40 @@
 package org.dargor.product.app.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 
 import java.time.Duration;
 
 @Configuration
 public class RedisConfig {
 
+    @Value("${spring.redis.host}")
+    private String redisHostname;
+    @Value("${spring.redis.port}")
+    private int redisPort;
+
     @Bean
-    JedisConnectionFactory jedisConnectionFactory() {
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-        redisStandaloneConfiguration.setHostName("redis");
-        redisStandaloneConfiguration.setPort(6379);
-
-        JedisClientConfiguration.JedisClientConfigurationBuilder jedisClientConfiguration = JedisClientConfiguration.builder();
-        jedisClientConfiguration.connectTimeout(Duration.ofSeconds(60));// 60s connection timeout
-
-        return new JedisConnectionFactory(redisStandaloneConfiguration,
-                jedisClientConfiguration.build());
+    public LettuceConnectionFactory jedisConnectionFactory() {
+        var redisConfiguration = new RedisStandaloneConfiguration();
+        redisConfiguration.setHostName(redisHostname);
+        redisConfiguration.setPort(redisPort);
+        return new LettuceConnectionFactory(redisConfiguration);
     }
 
     @Bean
-    public RedisCacheConfiguration cacheConfiguration() {
-        return RedisCacheConfiguration
-                .defaultCacheConfig()
-                .serializeValuesWith(RedisSerializationContext
-                        .SerializationPair
-                        .fromSerializer(new GenericJackson2JsonRedisSerializer()));
-    }
-
-    @Bean
-    public RedisTemplate<String, byte[]> redisTemplate() {
-        var template = new RedisTemplate<String, byte[]>();
+    public RedisTemplate<String, Object> redisTemplate() {
+        var template = new RedisTemplate<String, Object>();
         template.setConnectionFactory(jedisConnectionFactory());
+        template.setKeySerializer(new JdkSerializationRedisSerializer());
+        template.setValueSerializer(new GenericToStringSerializer<>(Object.class));
         return template;
     }
 
