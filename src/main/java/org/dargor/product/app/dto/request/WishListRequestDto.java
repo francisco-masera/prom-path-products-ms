@@ -1,12 +1,11 @@
-package org.dargor.product.app.dto;
+package org.dargor.product.app.dto.request;
+
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -14,9 +13,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class WishListRequestDto {
 
+    private String customerId;
 
-    private UUID customerId;
-
-    private List<ProductDto> products;
+    private List<ProductRequestDto> products;
 
 }

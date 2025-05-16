@@ -1,8 +1,12 @@
 package org.dargor.product.core.util.mapper;
 
-import org.dargor.product.app.dto.ProductDto;
-import org.dargor.product.app.dto.WishListDto;
-import org.dargor.product.app.dto.WishListRequestDto;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.dargor.product.app.dto.request.ProductRequestDto;
+import org.dargor.product.app.dto.request.WishListRequestDto;
+import org.dargor.product.app.dto.response.ProductResponseDto;
+import org.dargor.product.app.dto.response.WishListResponseDto;
 import org.dargor.product.core.entity.Product;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
@@ -10,16 +14,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 @Mapper
 public interface ProductMapper {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
-    default WishListDto productsToWishListResponse(List<Product> products) {
-        var wishList = new WishListDto();
+    default WishListResponseDto productsToWishListResponse(List<Product> products) {
+        var wishList = new WishListResponseDto();
         wishList.setProducts(this.productsToProductDtoList(products));
         return wishList;
     }
@@ -32,12 +32,12 @@ public interface ProductMapper {
     }
 
     @Mapping(target = "id", ignore = true)
-    Product productDtoToProduct(ProductDto productDto, UUID customerId);
+    Product productDtoToProduct(ProductRequestDto productResponseDto, String customerId);
 
     @IterableMapping(qualifiedByName = "productToProductDto")
-    List<ProductDto> productsToProductDtoList(List<Product> products);
+    List<ProductResponseDto> productsToProductDtoList(List<Product> products);
 
     @Named("productToProductDto")
-    ProductDto productToProductDto(Product product);
+    ProductResponseDto productToProductDto(Product product);
 
 }

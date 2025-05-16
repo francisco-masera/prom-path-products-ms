@@ -1,21 +1,20 @@
-package org.dargor.product.app.dto;
+package org.dargor.product.app.dto.response;
 
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDto {
+public class ProductResponseDto {
 
     private String denomination;
     private String brand;
-    private long quantity;
+    private Long quantity;
     private BigDecimal unitPrice;
-    private UUID customerId;
+    private String customerId;
 
 }
